@@ -76,10 +76,12 @@ def res_check(input_text, response):
     return False
 
 
-def main(text, batch_size=10):
+def main(text, batch_size=10, bypass_check=False):
     """text: list of original titles. 戻り値: 応答タイトルのリストまたは失敗メッセージ文字列。"""
     prompts = edit_title(text)
     responses = send_batches(prompts, batch_size=batch_size)
+    if bypass_check:
+        return responses
     result = res_check(text, responses)
     if result:
         return responses
@@ -89,6 +91,10 @@ def main(text, batch_size=10):
 
 if __name__ == "__main__":
     test_list_2 = [
+        "暴飲暴食P 「うそつきマカロン」feat. 重音テト ",
+        "あんずの花/ すりぃ feat.ねね(Official Music Video)",
+        "ヨルシカ「ただ君に晴れ」Music Video",
+        "[self cover] The Beast. /スペクタルP feat 可不",
         "MIMI - サイエンス (feat.重音テトSV)",
         "『ソルティメロウ』 / feat. 可不",
         "『天使の涙』 / feat.初音ミク",
@@ -98,11 +104,7 @@ if __name__ == "__main__":
         "『お砂糖哀歌』 / feat. 初音ミク",
         "『恋しくなったら手を叩こう』/ MIMI feat.花鏡紅璃",
         "『恋しくなったら手を叩こう』 / feat.重音テトSV",
-        "ヒューマとニズム-Hata",
-        "暴飲暴食P 「うそつきマカロン」feat. 重音テト ",
-        "あんずの花/ すりぃ feat.ねね(Official Music Video)",
-        "ヨルシカ「ただ君に晴れ」Music Video",
-        "[self cover] The Beast. /スペクタルP feat 可不",
+        "ヒューマとニズム-Hata"
     ]
 
     print(main(test_list_2))
