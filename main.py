@@ -1,12 +1,14 @@
-import conect
 import json
+import re
+import conect
+
 
 
 def edit_title(arr):
     sprit_num = 10
     arr_2 = []
     arr_2 = list(map(lambda x:f"{x[0]+1}.{x[1]}",enumerate(arr)))
-    print(arr_2)
+    # print(arr_2)
     reslte = []
     
     for i in range(0,len(arr_2),sprit_num):
@@ -17,7 +19,9 @@ def edit_title(arr):
 def send(prompt):
     conect.init()
     conect.send_message(" ".join(prompt))
-    return conect.response.choices[0].message.content
+    res = conect.response.choices[0].message.content
+    # print("Raw response:", res)
+    return res
 
 def list_search(arr, keyword_list):
     result = []
@@ -28,9 +32,9 @@ def list_search(arr, keyword_list):
                 found = True
                 break
         result.append(found)
-    print(arr)
-    print(keyword_list)
-    print(result)
+    # print(arr)
+    # print(keyword_list)
+    # print(result)
     return result
 
 def res_check_old(input_text, response):
@@ -57,7 +61,8 @@ def res_check(input_text, response):
             print(f"Input length: {len(input_text)}, Output length: {len(response)}")
             return False
     else:
-        for i in list_search(input_text, list(response)):
+        result_list = list_search(input_text, list(response))
+        for i in result_list:
             if not i:
                 print("Error: One or more input titles were not found in the output.",i)
                 return False
@@ -66,16 +71,15 @@ def res_check(input_text, response):
 
 def main(text):
     prompt = edit_title(text)
-    res = send(prompt)
-    print(res)
-    print(type(res))
-    res_2 = res.split(",")[0]
-    print("res_2:", type(res_2))
+    res = send(prompt)[1:-1]
+    res_2 = list(res.split(","))
+    # print("res_2 type:", type(res_2))
+    # print("res_2:", res_2[0])
     result = res_check(text, res_2)
     if result:
-        print(res)
+        return res
     else:
-        print("Failure: The output titles are not valid or do not match the input titles.")
+        return "Failure: The output titles are not valid or do not match the input titles."
 
 
 if __name__ == "__main__":
@@ -94,4 +98,4 @@ if __name__ == "__main__":
                     "ヨルシカ「ただ君に晴れ」Music Video",
                     "[self cover] The Beast. /スペクタルP feat 可不"]
 
-    main(test_list_2[0:5])
+    print(main(test_list_2[0:5]))
