@@ -1,6 +1,7 @@
 import ast
 import conect
-
+from dotenv import load_dotenv
+import os
 
 def edit_title(arr):
     """番号を付けたタイトル一覧（例: 1.タイトル）を返します。"""
